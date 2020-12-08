@@ -11,6 +11,10 @@ import os
 import sys
 from typing import List, Optional
 
+from fileops import find_targets_from_tar
+from staging import stage
+from tarmeta import get_meta
+
 try:
     from python_project import __version__
 except Exception:
@@ -50,8 +54,25 @@ def setup_parser():
         default="%(asctime)s %(name)s:%(lineno)s %(levelname)s | %(message)s",
     )
 
-    parser.add_argument('--data-dir', default=None)
     parser.add_argument('--version', action='version', version=__version__)
+    parser.add_argument(
+        '--meta',
+        '-m',
+        dest='meta',
+        type=str,
+        required=True,
+        help='metadata describing tarball contents',
+    )
+    parser.add_argument(
+        '--tarball', '-t', dest='tarfile', type=str, required=True, help='tar file'
+    )
+    parser.add_argument(
+        '--sample',
+        dest='sample',
+        type=str,
+        required=True,
+        help='sample identifier (uuid)',
+    )
 
     return parser
 
@@ -68,8 +89,8 @@ def process_args(argv: Optional[List] = None) -> collections.namedtuple:
     else:
         args, unknown_args = parser.parse_known_args()
 
-    if args.data_dir:
-        os.makedirs(args.data_dir)
+    # if args.data_dir:
+    #     os.makedirs(args.data_dir)
 
     args_dict = vars(args)
 
@@ -89,6 +110,25 @@ def run(run_args) -> int:
     start_time = datetime.datetime.now()
 
     log.info("Running process...")
+
+    log.info("Got arguments:")
+    log.info('meta {}'.format(run_args.meta))
+    log.info('tarfile {}'.format(run_args.tarfile))
+    log.info('sample {}'.format(run_args.sample))
+
+    # get metadata relevant to tarfile
+    log.info('Parsing metadata table.')
+    meta, fq_list = get_meta(meta_file=run_args.meta, tar_file=run_args.tarfile)
+
+    # find targets in tar file, save in look-up table
+    log.info('Identifying file paths in tarball')
+    tar_members = find_targets_from_tar(
+        tar_file=run_args.tarfile, target_file_list=fq_list
+    )
+
+    # stage fastq and read files
+    log.info('Staging data')
+    stage(meta, tar_members, run_args.tarfile, run_args.sample)
 
     # Log runtime info
     end_time = datetime.datetime.now()

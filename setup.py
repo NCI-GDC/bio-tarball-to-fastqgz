@@ -14,7 +14,9 @@ REPO = "bio-python-template"  # TODO: Replace me
 GITHUB_REPO = "https://github.com/NCI-GDC/{}".format(REPO)
 PYPI_PACKAGE = "bioinf-{}".format(REPO)
 
-INSTALL_REQUIRES = []
+INSTALL_REQUIRES = [
+    'pandas==1.15',
+]
 
 DEV_REQUIRES = [
     'detect-secrets==0.13.1',

@@ -1,7 +1,8 @@
 detect-secrets==0.13.1
 flake8
 isort
-mock
 pre-commit
+mock
 pytest
 pytest-cov
+pandas==1.1.5
