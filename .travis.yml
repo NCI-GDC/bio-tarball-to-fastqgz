@@ -16,7 +16,7 @@ jobs:
   - stage: test
     name: Test Docker
     script:
-    - make version version-pypi
+    - make version print-pypi
     - make test-docker
   - stage: publish-staging
     name: Publish staging image
