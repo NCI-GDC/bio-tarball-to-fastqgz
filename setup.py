@@ -8,14 +8,14 @@ from types import SimpleNamespace
 
 from setuptools import Command, find_packages, setup
 
-PACKAGE = "python_project"  # TODO: Replace me
-REPO = "bio-python-template"  # TODO: Replace me
+PACKAGE = "tarball_to_fastqgz"
+REPO = "bio-tarball-to-fastqgz"
 
 GITHUB_REPO = "https://github.com/NCI-GDC/{}".format(REPO)
 PYPI_PACKAGE = "bioinf-{}".format(REPO)
 
 INSTALL_REQUIRES = [
-    'pandas==1.15',
+    'pandas==1.1.5',
 ]
 
 DEV_REQUIRES = [
@@ -227,7 +227,7 @@ class Requirements(Command):
 
 setup(
     name=PYPI_PACKAGE,
-    description="",  # TODO: Update me
+    description="Extracts fastq data from tarballs and stages them as fastq.gz + json metadata",
     url=GITHUB_REPO,
     version=__pypi_version__,
     python_requires=">=3.6",

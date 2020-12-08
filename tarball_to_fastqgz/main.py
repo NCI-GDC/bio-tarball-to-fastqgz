@@ -16,7 +16,7 @@ from staging import stage
 from tarmeta import get_meta
 
 try:
-    from python_project import __version__
+    from tarball_to_fastqgz import __version__
 except Exception:
     __version__ = '0.0.0'
 

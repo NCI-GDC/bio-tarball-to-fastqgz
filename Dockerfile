@@ -1,6 +1,6 @@
 FROM python:3.6-stretch
 
-ENV BINARY=python_project
+ENV BINARY=tarball_to_fastqgz
 
 RUN apt-get update \
   && apt-get clean autoclean \
@@ -15,6 +15,6 @@ RUN make init-pip \
   && ln -s /opt/bin/${BINARY} /bin/${BINARY} \
   && chmod +x /bin/${BINARY}
 
-ENTRYPOINT ["/bin/python_project"]
+ENTRYPOINT ["/bin/tarball_to_fastqgz"]
 
 CMD ["--help"]

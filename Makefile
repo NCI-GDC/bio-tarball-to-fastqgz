@@ -1,6 +1,6 @@
 VERSION = 1.0.0
-REPO = bio-python-template
-MODULE = python_project
+REPO = bio-tarball-to-fastqgz
+MODULE = tarball_to_fastqgz
 BRANCH_NAME?=unknown
 
 GIT_SHORT_HASH:=$(shell git rev-parse --short HEAD)
