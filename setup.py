@@ -240,6 +240,8 @@ setup(
         "print_version": PrintVersion,
     },
     scripts=[os.path.join(os.path.dirname(__file__), 'bin', PACKAGE)],
+    package_data={"tarball_to_fastqgz": ["metadata/*.tsv"]},
+    include_package_data=True,
 )
 
 # __END__
