@@ -62,7 +62,7 @@ def setup_parser():
         '-m',
         dest='meta',
         type=str,
-        required=True,
+        required=False,
         help='metadata describing tarball contents',
         default=resource_filename(
             "tarball_to_fastqgz", "metadata/tcga.rna.11128.tarball.meta.tsv"
