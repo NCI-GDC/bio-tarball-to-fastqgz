@@ -1,14 +1,8 @@
 from json import dumps
 
-from fileops import from_tar_to_dest
-from rgmeta import build_rg_fastq_file_record
-from tarmeta import FASTQ_GZ, FASTQ_PLAIN, TAR_FASTQ, TAR_GZ
-
-# from main import log
-
-
-def build_json_package(meta):
-    pass
+from tarball_to_fastqgz.fileops import from_tar_to_dest
+from tarball_to_fastqgz.rgmeta import build_rg_fastq_file_record
+from tarball_to_fastqgz.tarmeta import FASTQ_GZ, FASTQ_PLAIN, TAR_FASTQ, TAR_GZ
 
 
 def stage(

@@ -11,9 +11,11 @@ import os
 import sys
 from typing import List, Optional
 
-from fileops import find_targets_from_tar
-from staging import stage
-from tarmeta import get_meta
+from pkg_resources import resource_filename
+
+from tarball_to_fastqgz.fileops import find_targets_from_tar
+from tarball_to_fastqgz.staging import stage
+from tarball_to_fastqgz.tarmeta import get_meta
 
 try:
     from tarball_to_fastqgz import __version__
@@ -62,6 +64,9 @@ def setup_parser():
         type=str,
         required=True,
         help='metadata describing tarball contents',
+        default=resource_filename(
+            "tarball_to_fastqgz", "metadata/tcga.rna.11128.tarball.meta.tsv"
+        ),
     )
     parser.add_argument(
         '--tarball', '-t', dest='tarfile', type=str, required=True, help='tar file'
@@ -118,7 +123,9 @@ def run(run_args) -> int:
 
     # get metadata relevant to tarfile
     log.info('Parsing metadata table.')
-    meta, fq_list = get_meta(meta_file=run_args.meta, tar_file=run_args.tarfile)
+    meta, fq_list = get_meta(
+        meta_file=run_args.meta, tar_file=os.path.basename(run_args.tarfile)
+    )
 
     # find targets in tar file, save in look-up table
     log.info('Identifying file paths in tarball')

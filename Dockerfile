@@ -8,7 +8,6 @@ RUN apt-get update \
   && rm -rf /var/lib/apt/lists/*
 
 COPY ./dist/ /opt
-COPY metadata/tcga.rna.11128.tarball.meta.tsv /opt/
 
 WORKDIR /opt
 
@@ -18,4 +17,4 @@ RUN make init-pip \
 
 ENTRYPOINT ["/bin/tarball_to_fastqgz"]
 
-CMD ["--meta", "tcga.rna.11128.tarball.meta.tsv"]
+CMD ["--help"]
