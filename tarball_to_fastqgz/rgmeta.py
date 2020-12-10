@@ -35,15 +35,6 @@ def build_cwl_rgmeta(sample, rgname):
     )
 
 
-def getmount(path):
-    path = os.path.realpath(os.path.abspath(path))
-    while path != os.path.sep:
-        if os.path.ismount(path):
-            return path
-        path = os.path.abspath(os.path.join(path, os.pardir))
-    return path
-
-
 def build_cwl_file(file):
     """
     build dictionary representing cwl File object
