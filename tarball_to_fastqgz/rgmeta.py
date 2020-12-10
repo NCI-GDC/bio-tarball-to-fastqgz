@@ -1,4 +1,4 @@
-from os import path
+import os
 
 
 def build_cwl_rgmeta(sample, rgname):
@@ -35,20 +35,23 @@ def build_cwl_rgmeta(sample, rgname):
     )
 
 
+def getmount(path):
+    path = os.path.realpath(os.path.abspath(path))
+    while path != os.path.sep:
+        if os.path.ismount(path):
+            return path
+        path = os.path.abspath(os.path.join(path, os.pardir))
+    return path
+
+
 def build_cwl_file(file):
     """
     build dictionary representing cwl File object
     """
 
-    if not path.exists(file):
-        # raise exception
-        pass
-
     return {
         'class': 'File',
-        'location': path.abspath(file),
-        'basename': path.basename(file),
-        'dirname': path.dirname(file),
+        'location': os.path.basename(file),
     }
 
 
