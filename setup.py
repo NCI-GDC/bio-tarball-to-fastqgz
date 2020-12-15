@@ -14,9 +14,7 @@ REPO = "bio-tarball-to-fastqgz"
 GITHUB_REPO = "https://github.com/NCI-GDC/{}".format(REPO)
 PYPI_PACKAGE = "bioinf-{}".format(REPO)
 
-INSTALL_REQUIRES = [
-    'pandas==1.1.5',
-]
+INSTALL_REQUIRES = ['pandas==1.1.5', 'mgzip==0.2.1']
 
 DEV_REQUIRES = [
     'detect-secrets==0.13.1',
