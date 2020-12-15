@@ -25,13 +25,13 @@ def build_cwl_rgmeta(sample, rgname):
         ID=rgname,
         LB=sample,
         SM=sample,
-        CN='',
-        DS='',
-        DT='',
-        FO='',
-        KS='',
-        PI='',
-        PM='',
+        CN='null',
+        DS='null',
+        DT='null',
+        FO='null',
+        KS='null',
+        PI='null',
+        PM='null',
     )
 
 

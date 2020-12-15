@@ -1,11 +1,7 @@
 import tarfile
 from itertools import chain, filterfalse, repeat
 
-
-def create_file_dir():
-    """
-    create a directory for storing the files belonging to one read group
-    """
+import mgzip
 
 
 def find_targets_from_tar(tar_file=None, target_file_list=[]) -> dict:
@@ -55,8 +51,8 @@ def write_to_gzip_file(content, destination):
     """
     Write content to gzipped file
     """
-    import gzip
+    import mgzip
 
-    with gzip.open(destination, 'wb') as destfile:
+    with mgzip.open(destination, 'wb', thread=12) as destfile:
         for blob in content:
             destfile.write(blob)
