@@ -12,6 +12,7 @@ def stage(
     sample_id,
     json_filename='rg_fastq_list.json',
     prefix='./',
+    dryrun=False,
 ):
     """
     Extract data and stage files into directory
@@ -23,24 +24,26 @@ def stage(
     for rg_name, rg_dict in meta['read_groups'].items():
         # log.info("Processing read group {}".format(rg_name))
         for fq1, fq2 in rg_dict['files']:
-            fq1_loc = strategy_fn(tarfile, tar_members[fq1], fq1, prefix)
+            fq1_loc = strategy_fn(tarfile, tar_members[fq1], fq1, prefix, dryrun)
             fq2_loc = (
-                strategy_fn(tarfile, tar_members[fq2], fq2, prefix)
+                strategy_fn(tarfile, tar_members[fq2], fq2, prefix, dryrun)
                 if fq2 is not None
                 else None
             )
             rec = build_rg_fastq_file_record(sample_id, rg_name, fq1_loc, fq2_loc)
             rg_fq_record_list += [rec]
-    write_json_file(rg_fq_record_list, prefix + json_filename)
+    write_json_file(rg_fq_record_list, prefix + json_filename, dryrun)
 
 
-def write_json_file(object, json_filename):
+def write_json_file(object, json_filename, dryrun=False):
     """
     Writes readgroup_fastq_file_list json file
     """
-
-    with open(json_filename, 'w') as json_out:
-        json_out.write(dumps(object))
+    if dryrun:
+        print(dumps(object, indent=4, sort_keys=True))
+    else:
+        with open(json_filename, 'w') as json_out:
+            json_out.write(dumps(object))
 
 
 def resolve_strategy(meta=None):
@@ -70,7 +73,9 @@ def resolve_strategy(meta=None):
     print("NO STRATEGY FOUND")
 
 
-def strat_pe_tar_fqgz(tar_filename, tar_member, basename, prefix='./') -> str:
+def strat_pe_tar_fqgz(
+    tar_filename, tar_member, basename, prefix='./', dryrun=False
+) -> str:
     """
     tar file containing paired fastq.gz files; between 1 and 3 pairs
 
@@ -81,16 +86,19 @@ def strat_pe_tar_fqgz(tar_filename, tar_member, basename, prefix='./') -> str:
 
     dest_name = prefix + basename
     # extract tar_member from tar file, save to file at dest_name
-    from_tar_to_dest(
-        tar_file=tar_filename,
-        tar_member=tar_member,
-        destination=dest_name,
-        compress_dest=False,
-    )
+    if not dryrun:
+        from_tar_to_dest(
+            tar_file=tar_filename,
+            tar_member=tar_member,
+            destination=dest_name,
+            compress_dest=False,
+        )
     return dest_name
 
 
-def strat_pe_targz_fqplain(tar_filename, tar_member, basename, prefix='./'):
+def strat_pe_targz_fqplain(
+    tar_filename, tar_member, basename, prefix='./', dryrun=False
+):
     """
     tar.gz file contiaining plain paired-end fastq files
 
@@ -100,16 +108,19 @@ def strat_pe_targz_fqplain(tar_filename, tar_member, basename, prefix='./'):
     """
     dest_name = prefix + basename + '.gz'
     # extract tar_member from tar file, gzip and save to file at dest_name
-    from_tar_to_dest(
-        tar_file=tar_filename,
-        tar_member=tar_member,
-        destination=dest_name,
-        compress_dest=True,
-    )
+    if not dryrun:
+        from_tar_to_dest(
+            tar_file=tar_filename,
+            tar_member=tar_member,
+            destination=dest_name,
+            compress_dest=True,
+        )
     return dest_name
 
 
-def strat_se_targz_fqplain(tar_filename, tar_member, basename, prefix='./'):
+def strat_se_targz_fqplain(
+    tar_filename, tar_member, basename, prefix='./', dryrun=False
+):
     """
     tar.gz file containing plain single-end fastq file
 
@@ -120,10 +131,11 @@ def strat_se_targz_fqplain(tar_filename, tar_member, basename, prefix='./'):
 
     dest_name = prefix + basename + '.gz'
     # extract tar_member from tar file, gzip and save to file at dest_name
-    from_tar_to_dest(
-        tar_file=tar_filename,
-        tar_member=tar_member,
-        destination=dest_name,
-        compress_dest=True,
-    )
+    if not dryrun:
+        from_tar_to_dest(
+            tar_file=tar_filename,
+            tar_member=tar_member,
+            destination=dest_name,
+            compress_dest=True,
+        )
     return dest_name

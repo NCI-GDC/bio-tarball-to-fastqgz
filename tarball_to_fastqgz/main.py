@@ -78,6 +78,14 @@ def setup_parser():
         required=True,
         help='sample identifier (uuid)',
     )
+    parser.add_argument(
+        '--dryrun',
+        dest='dryrun',
+        required=False,
+        default=False,
+        action='store_true',
+        help='Do not write any files just print json to STDOUT',
+    )
 
     return parser
 
@@ -135,7 +143,15 @@ def run(run_args) -> int:
 
     # stage fastq and read files
     log.info('Staging data')
-    stage(meta, tar_members, run_args.tarfile, run_args.sample)
+    stage(
+        meta,
+        tar_members,
+        run_args.tarfile,
+        run_args.sample,
+        json_filename='rg_fastq_list.json',
+        prefix='./',
+        dryrun=run_args.dryrun,
+    )
 
     # Log runtime info
     end_time = datetime.datetime.now()
