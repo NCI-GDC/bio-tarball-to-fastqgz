@@ -1,25 +1,20 @@
-FROM quay.io/ncigdc/bio-python:3.6 as builder
+FROM python:3.6-stretch
 
-COPY ./ /opt
+ENV BINARY=tarball_to_fastqgz
 
-WORKDIR /opt
+RUN apt-get update \
+  && apt-get clean autoclean \
+  && apt-get autoremove -y \
+  && rm -rf /var/lib/apt/lists/*
 
-RUN python -m pip install tox && tox
-
-# tox step builds sdist
-
-FROM quay.io/ncigdc/bio-python:3.6
-
-COPY --from=builder /opt/dist/*.tar.gz /opt
-COPY ./requirements.txt /opt/requirements.txt
+COPY ./dist/ /opt
 
 WORKDIR /opt
 
-# Install package from sdist
-RUN pip install -r requirements.txt \
-	&& pip install *.tar.gz \
-	&& rm -rf *.tar.gz requirements.txt
+RUN make init-pip \
+  && ln -s /opt/bin/${BINARY} /bin/${BINARY} \
+  && chmod +x /bin/${BINARY}
 
-ENTRYPOINT ["tarball_to_fastqgz"]
+ENTRYPOINT ["/bin/tarball_to_fastqgz"]
 
 CMD ["--help"]

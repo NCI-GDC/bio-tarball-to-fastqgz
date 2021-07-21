@@ -1,9 +1,9 @@
--c requirements.txt
+pandas==1.1.5
+mgzip==0.2.1
 detect-secrets==0.13.1
-isort
 flake8
+isort
 pre-commit
-tox
 mock
 pytest
-mypy
+pytest-cov
