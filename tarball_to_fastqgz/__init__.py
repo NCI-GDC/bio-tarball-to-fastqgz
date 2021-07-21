@@ -1,3 +1,6 @@
-from tarball_to_fastqgz._version import __short_version__
+try:
+    from tarball_to_fastqgz._version import version
+except ImportError:
+    version = "unknown"
 
-__version__ = __short_version__
+__version__ = version
