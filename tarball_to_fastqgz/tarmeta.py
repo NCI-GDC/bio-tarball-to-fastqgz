@@ -36,7 +36,6 @@ def get_meta(meta_file=None, tar_file=None, check_types=True) -> tuple:
     fq_name
     fq_type
     read_group_name
-    
     PE
 
     returns dict with following structure
@@ -47,13 +46,13 @@ def get_meta(meta_file=None, tar_file=None, check_types=True) -> tuple:
     PE: <pe>
     num_fq: <num_fq>
     read_groups:
-        <rg1>: 
-            rg_meta: 
+        <rg1>:
+            rg_meta:
                 <rg_meta_fields>
             fq_list: [fq_list]
         ...
-        <rgN>: 
-            rg_meta: 
+        <rgN>:
+            rg_meta:
                 <rg_meta_fields>
             fq_list: [fq_list]
     """
