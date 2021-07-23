@@ -1,7 +1,7 @@
 import os
 
 
-def build_cwl_rgmeta(sample, rgname):
+def build_cwl_rgmeta(sample: str, rgname: str) -> dict:
     """
     Uses sample names and rg_name from metadata to create rg_meta information for aligner
 
@@ -35,24 +35,24 @@ def build_cwl_rgmeta(sample, rgname):
     )
 
 
-def build_cwl_file(file):
+def build_cwl_file(file: str) -> dict:
     """
     build dictionary representing cwl File object
     """
 
-    return {
-        'class': 'File',
-        'location': os.path.basename(file),
-    }
+    return {'class': 'File', 'location': os.path.basename(file)}
 
 
-def build_rg_fastq_file_record(sample, rgname, fq1, fq2=None):
+def build_rg_fastq_file_record(
+    sample: str, rgname: str, fq1: str, fq2: str = None
+) -> dict:
     """
     build dictionary representing readgroup_fastq_file object
     """
-
-    return dict(
+    rec = dict(
         forward_fastq=build_cwl_file(fq1),
-        reverse_fastq=build_cwl_file(fq2),
         readgroup_meta=build_cwl_rgmeta(sample, rgname),
     )
+    if fq2 is not None:
+        rec["reverse_fastq"] = build_cwl_file(fq2)
+    return rec
