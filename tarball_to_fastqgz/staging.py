@@ -54,19 +54,19 @@ def resolve_strategy(meta=None):
     if (
         meta['tar_type'] == TAR_FASTQ
         and meta['fq_type'] == FASTQ_GZ
-        and meta['PE'] == True
+        and meta['PE'] is True
     ):
         return strat_pe_tar_fqgz
     if (
         meta['tar_type'] == TAR_GZ
         and meta['fq_type'] == FASTQ_PLAIN
-        and meta['PE'] == True
+        and meta['PE'] is True
     ):
         return strat_pe_targz_fqplain
     if (
         meta['tar_type'] == TAR_GZ
         and meta['fq_type'] == FASTQ_PLAIN
-        and meta['PE'] == False
+        and meta['PE'] is False
     ):
         return strat_se_targz_fqplain
 
@@ -80,7 +80,6 @@ def strat_pe_tar_fqgz(
     tar file containing paired fastq.gz files; between 1 and 3 pairs
 
     Extract fastq.gz files into output directory
-    
     returns destination
     """
 
@@ -103,7 +102,6 @@ def strat_pe_targz_fqplain(
     tar.gz file contiaining plain paired-end fastq files
 
     Extract fastq files, write compressed file to output directory
-    
     returns destination file
     """
     dest_name = prefix + basename + '.gz'
@@ -125,7 +123,6 @@ def strat_se_targz_fqplain(
     tar.gz file containing plain single-end fastq file
 
     Extract fastq file, write compressed file to output directory
-    
     returns destination file
     """
 
