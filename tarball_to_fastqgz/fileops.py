@@ -51,7 +51,6 @@ def write_to_gzip_file(content, destination):
     """
     Write content to gzipped file
     """
-    import mgzip
 
     with mgzip.open(destination, 'wb', thread=12) as destfile:
         for blob in content:

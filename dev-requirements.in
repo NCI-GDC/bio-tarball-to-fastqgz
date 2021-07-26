@@ -1,9 +1,9 @@
-pandas==1.1.5
-mgzip==0.2.1
+-c requirements.txt
 detect-secrets==0.13.1
-flake8
 isort
+flake8
 pre-commit
+tox
 mock
 pytest
-pytest-cov
+mypy
