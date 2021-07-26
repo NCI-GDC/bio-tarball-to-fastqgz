@@ -51,5 +51,27 @@ class TestRgmeta(unittest.TestCase):
 
         assert rec == expected
 
+    def test_build_rg_fastq_file_record_pe(self):
+        sample = "test_sample"
+        rgname = "test_RG"
+        fq1 = "test_R1.fq"
+        fq2 = "test_R2.fq"
+
+        rec = build_rg_fastq_file_record(sample, rgname, fq1, fq2)
+
+        expected = {
+            "readgroup_meta": {
+                "PL": "ILLUMINA",
+                "PU": rgname,
+                "ID": rgname,
+                "LB": sample,
+                "SM": sample,
+            },
+            "forward_fastq": {"class": "File", "location": fq1},
+            "reverse_fastq": {"class": "File", "location": fq2},
+        }
+
+        assert rec == expected
+
 
 # __END__
