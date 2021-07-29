@@ -54,19 +54,19 @@ def resolve_strategy(meta=None):
     if (
         meta['tar_type'] == TAR_FASTQ
         and meta['fq_type'] == FASTQ_GZ
-        and meta['PE'] is True
+        and meta['PE'] == True
     ):
         return strat_pe_tar_fqgz
     if (
         meta['tar_type'] == TAR_GZ
         and meta['fq_type'] == FASTQ_PLAIN
-        and meta['PE'] is True
+        and meta['PE'] == True
     ):
         return strat_pe_targz_fqplain
     if (
         meta['tar_type'] == TAR_GZ
         and meta['fq_type'] == FASTQ_PLAIN
-        and meta['PE'] is False
+        and meta['PE'] == False
     ):
         return strat_se_targz_fqplain
 
