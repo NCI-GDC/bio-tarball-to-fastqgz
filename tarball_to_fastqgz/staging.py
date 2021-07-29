@@ -1,5 +1,6 @@
 from json import dumps
 
+from tarball_to_fastqgz.error import NoStrategyError
 from tarball_to_fastqgz.fileops import from_tar_to_dest
 from tarball_to_fastqgz.rgmeta import build_rg_fastq_file_record
 from tarball_to_fastqgz.tarmeta import FASTQ_GZ, FASTQ_PLAIN, TAR_FASTQ, TAR_GZ
@@ -22,7 +23,6 @@ def stage(
     rg_fq_record_list = []
 
     for rg_name, rg_dict in meta['read_groups'].items():
-        # log.info("Processing read group {}".format(rg_name))
         for fq1, fq2 in rg_dict['files']:
             fq1_loc = strategy_fn(tarfile, tar_members[fq1], fq1, prefix, dryrun)
             fq2_loc = (
@@ -54,23 +54,23 @@ def resolve_strategy(meta=None):
     if (
         meta['tar_type'] == TAR_FASTQ
         and meta['fq_type'] == FASTQ_GZ
-        and meta['PE'] == True
+        and meta['PE'] is True
     ):
         return strat_pe_tar_fqgz
     if (
         meta['tar_type'] == TAR_GZ
         and meta['fq_type'] == FASTQ_PLAIN
-        and meta['PE'] == True
+        and meta['PE'] is True
     ):
         return strat_pe_targz_fqplain
     if (
         meta['tar_type'] == TAR_GZ
         and meta['fq_type'] == FASTQ_PLAIN
-        and meta['PE'] == False
+        and meta['PE'] is False
     ):
         return strat_se_targz_fqplain
 
-    print("NO STRATEGY FOUND")
+    raise NoStrategyError("NO STRATEGY FOUND")
 
 
 def strat_pe_tar_fqgz(
