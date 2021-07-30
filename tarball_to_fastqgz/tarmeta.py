@@ -41,22 +41,19 @@ def get_meta(meta_file=None, tar_file=None, check_types=True) -> tuple:
     PE
 
     returns dict with following structure
+    tar_name: <tar_name>
     sar_id: <sar_id>
     project: <project>
     tar_type: <tar_type>
-    fq_type: <fq_type>
-    PE: <pe>
     num_fq: <num_fq>
+    PE: <pe>
+    fq_type: <fq_type>
     read_groups:
         <rg1>:
-            rg_meta:
-                <rg_meta_fields>
-            fq_list: [fq_list]
+            files: [fq_list]
         ...
         <rgN>:
-            rg_meta:
-                <rg_meta_fields>
-            fq_list: [fq_list]
+            files: [fq_list]
     """
 
     if meta_file is None:
