@@ -7,14 +7,14 @@ from tarball_to_fastqgz.tarmeta import FASTQ_GZ, FASTQ_PLAIN, TAR_FASTQ, TAR_GZ
 
 
 def stage(
-    meta,
-    tar_members,
-    tarfile,
-    sample_id,
-    json_filename='rg_fastq_list.json',
-    prefix='./',
-    dryrun=False,
-):
+    meta: dict,
+    tar_members: dict,
+    tarfile: str,
+    sample_id: str,
+    json_filename: str = 'rg_fastq_list.json',
+    prefix: str = './',
+    dryrun: bool = False,
+) -> None:
     """
     Extract data and stage files into directory
     """
@@ -35,7 +35,7 @@ def stage(
     write_json_file(rg_fq_record_list, prefix + json_filename, dryrun)
 
 
-def write_json_file(object, json_filename, dryrun=False):
+def write_json_file(object: list, json_filename: str, dryrun: bool = False):
     """
     Writes readgroup_fastq_file_list json file
     """
@@ -46,7 +46,7 @@ def write_json_file(object, json_filename, dryrun=False):
             json_out.write(dumps(object))
 
 
-def resolve_strategy(meta=None):
+def resolve_strategy(meta: dict) -> callable:
     """
     Decide which strategy to use for extracting files and placing them where they should be
     """
@@ -74,7 +74,11 @@ def resolve_strategy(meta=None):
 
 
 def strat_pe_tar_fqgz(
-    tar_filename, tar_member, basename, prefix='./', dryrun=False
+    tar_filename: str,
+    tar_member: str,
+    basename: str,
+    prefix: str = './',
+    dryrun: bool = False,
 ) -> str:
     """
     tar file containing paired fastq.gz files; between 1 and 3 pairs
@@ -96,7 +100,11 @@ def strat_pe_tar_fqgz(
 
 
 def strat_pe_targz_fqplain(
-    tar_filename, tar_member, basename, prefix='./', dryrun=False
+    tar_filename: str,
+    tar_member: str,
+    basename: str,
+    prefix: str = './',
+    dryrun: bool = False,
 ):
     """
     tar.gz file contiaining plain paired-end fastq files
@@ -117,7 +125,11 @@ def strat_pe_targz_fqplain(
 
 
 def strat_se_targz_fqplain(
-    tar_filename, tar_member, basename, prefix='./', dryrun=False
+    tar_filename: str,
+    tar_member: str,
+    basename: str,
+    prefix: str = './',
+    dryrun: bool = False,
 ):
     """
     tar.gz file containing plain single-end fastq file

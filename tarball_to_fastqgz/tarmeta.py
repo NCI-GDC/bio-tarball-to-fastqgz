@@ -1,6 +1,8 @@
 from itertools import zip_longest
+from typing import Tuple
 
 import pandas as pd
+from numpy import iterable
 
 # from tarball_to_fastqgz.error import UndefinedTarType, UndefinedFastqType, FqNumberOutOfBounds, UnexpectedPEType
 
@@ -18,14 +20,14 @@ STRAT_PE_TARGZ_FQPLAIN = 'paired plain fastq files in tar.gz'
 STRAT_SE_TARGZ_FQPLAIN = 'single plain fastq file in tar.gz'
 
 
-def grouper(n, iterable, fillvalue=None):
+def grouper(n: int, iterable: iterable, fillvalue: any = None) -> iterable:
     "Collect data into fixed-length chunks or blocks"
     # grouper(3, 'ABCDEFG', 'x') --> ABC DEF Gxx"
     args = [iter(iterable)] * n
     return zip_longest(fillvalue=fillvalue, *args)
 
 
-def get_meta(meta_file=None, tar_file=None, check_types=True) -> tuple:
+def get_meta(meta_file: str = None, tar_file: str = None) -> Tuple[dict, str]:
     """
     lookup tar_file in meta_file and decide how to handle the data
     metadata is expected to have these columns:

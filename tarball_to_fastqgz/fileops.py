@@ -1,10 +1,10 @@
 import tarfile
-from itertools import chain, filterfalse, repeat
+from itertools import repeat
 
 import mgzip
 
 
-def find_targets_from_tar(tar_file=None, target_file_list=[]) -> dict:
+def find_targets_from_tar(tar_file: str, target_file_list: list = []) -> dict:
     """
     Given a list of file names of interest, search the contents of the tar file
     to get the corresponding tar record names.
@@ -24,7 +24,7 @@ def find_targets_from_tar(tar_file=None, target_file_list=[]) -> dict:
 
 
 def from_tar_to_dest(
-    tar_file=None, tar_member=None, destination=None, compress_dest=False
+    tar_file: str, tar_member: str, destination: str, compress_dest: bool = False
 ) -> None:
     """
     Extract tar_member from tar_file and write the contents to destination.
@@ -38,7 +38,7 @@ def from_tar_to_dest(
             write_to_plain_file(content, destination)
 
 
-def write_to_plain_file(content, destination):
+def write_to_plain_file(content: any, destination: str):
     """
     Write content to plain file
     """
@@ -47,7 +47,7 @@ def write_to_plain_file(content, destination):
             destfile.write(blob)
 
 
-def write_to_gzip_file(content, destination):
+def write_to_gzip_file(content: any, destination: str):
     """
     Write content to gzipped file
     """
