@@ -1,4 +1,4 @@
-import unittest
+from unittest import TestCase
 
 from tarball_to_fastqgz.rgmeta import (
     build_cwl_file,
@@ -7,7 +7,7 @@ from tarball_to_fastqgz.rgmeta import (
 )
 
 
-class TestRgmeta(unittest.TestCase):
+class TestRgmeta(TestCase):
     def test_build_cwl_file(self):
         filename = "foo.txt"
         res = build_cwl_file(filename)

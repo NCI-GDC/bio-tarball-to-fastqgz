@@ -25,15 +25,16 @@ except Exception:
 log = logging.getLogger(__name__)
 
 
-def setup_logger(args):
+def setup_logger(args: collections.namedtuple) -> None:
     """Apply logging config from CLI args."""
 
     logging.basicConfig(
-        level=args.log_level, format=args.log_format,
+        level=args.log_level,
+        format=args.log_format,
     )
 
 
-def setup_parser():
+def setup_parser() -> None:
     parser = argparse.ArgumentParser()
 
     logging_group = parser.add_argument_group("Logging")
@@ -91,8 +92,7 @@ def setup_parser():
 
 
 def process_args(argv: Optional[List] = None) -> collections.namedtuple:
-    """Process args to NamedTuple.
-    """
+    """Process args to NamedTuple."""
 
     parser = setup_parser()
     argv = argv or sys.argv
@@ -115,7 +115,7 @@ def process_args(argv: Optional[List] = None) -> collections.namedtuple:
     return run_args(**args_dict)
 
 
-def run(run_args) -> int:
+def run(run_args: collections.namedtuple) -> int:
     """Method for running script logic."""
 
     ret_val = 0

@@ -1,19 +1,20 @@
 from json import dumps
 
+from tarball_to_fastqgz.error import NoStrategyError
 from tarball_to_fastqgz.fileops import from_tar_to_dest
 from tarball_to_fastqgz.rgmeta import build_rg_fastq_file_record
 from tarball_to_fastqgz.tarmeta import FASTQ_GZ, FASTQ_PLAIN, TAR_FASTQ, TAR_GZ
 
 
 def stage(
-    meta,
-    tar_members,
-    tarfile,
-    sample_id,
-    json_filename='rg_fastq_list.json',
-    prefix='./',
-    dryrun=False,
-):
+    meta: dict,
+    tar_members: dict,
+    tarfile: str,
+    sample_id: str,
+    json_filename: str = 'rg_fastq_list.json',
+    prefix: str = './',
+    dryrun: bool = False,
+) -> None:
     """
     Extract data and stage files into directory
     """
@@ -22,7 +23,6 @@ def stage(
     rg_fq_record_list = []
 
     for rg_name, rg_dict in meta['read_groups'].items():
-        # log.info("Processing read group {}".format(rg_name))
         for fq1, fq2 in rg_dict['files']:
             fq1_loc = strategy_fn(tarfile, tar_members[fq1], fq1, prefix, dryrun)
             fq2_loc = (
@@ -35,7 +35,7 @@ def stage(
     write_json_file(rg_fq_record_list, prefix + json_filename, dryrun)
 
 
-def write_json_file(object, json_filename, dryrun=False):
+def write_json_file(object: list, json_filename: str, dryrun: bool = False):
     """
     Writes readgroup_fastq_file_list json file
     """
@@ -46,7 +46,7 @@ def write_json_file(object, json_filename, dryrun=False):
             json_out.write(dumps(object))
 
 
-def resolve_strategy(meta=None):
+def resolve_strategy(meta: dict) -> callable:
     """
     Decide which strategy to use for extracting files and placing them where they should be
     """
@@ -70,11 +70,15 @@ def resolve_strategy(meta=None):
     ):
         return strat_se_targz_fqplain
 
-    print("NO STRATEGY FOUND")
+    raise NoStrategyError("NO STRATEGY FOUND")
 
 
 def strat_pe_tar_fqgz(
-    tar_filename, tar_member, basename, prefix='./', dryrun=False
+    tar_filename: str,
+    tar_member: str,
+    basename: str,
+    prefix: str = './',
+    dryrun: bool = False,
 ) -> str:
     """
     tar file containing paired fastq.gz files; between 1 and 3 pairs
@@ -96,7 +100,11 @@ def strat_pe_tar_fqgz(
 
 
 def strat_pe_targz_fqplain(
-    tar_filename, tar_member, basename, prefix='./', dryrun=False
+    tar_filename: str,
+    tar_member: str,
+    basename: str,
+    prefix: str = './',
+    dryrun: bool = False,
 ):
     """
     tar.gz file contiaining plain paired-end fastq files
@@ -117,7 +125,11 @@ def strat_pe_targz_fqplain(
 
 
 def strat_se_targz_fqplain(
-    tar_filename, tar_member, basename, prefix='./', dryrun=False
+    tar_filename: str,
+    tar_member: str,
+    basename: str,
+    prefix: str = './',
+    dryrun: bool = False,
 ):
     """
     tar.gz file containing plain single-end fastq file
