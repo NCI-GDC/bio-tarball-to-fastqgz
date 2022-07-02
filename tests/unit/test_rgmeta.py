@@ -7,7 +7,6 @@ from tarball_to_fastqgz.rgmeta import (
 )
 
 
-
 class TestRgmeta(TestCase):
     def test_build_cwl_file(self):
         filename = "foo.txt"

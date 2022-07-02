@@ -15,26 +15,26 @@ class NoStrategyError(Error):
 class UndefinedTarType(Error):
     """Tar type undefined"""
 
-    def __init__(value: str) -> None:
+    def __init__(self, value: str) -> None:
         super().__init__(f"Unexpected tar type: {value}")
 
 
 class UndefinedFastqType(Error):
     """unexpected FASTQ Type"""
 
-    def __init__(value: str) -> None:
+    def __init__(self, value: str) -> None:
         super().__init__(f"Unexpected fastq type: {value}")
 
 
 class FqNumberOutOfBounds(Error):
     """Number of FASTQ Files out of bounds"""
 
-    def __init__(value: int) -> None:
+    def __init__(self, value: int) -> None:
         super().__init__(f"Unexpected number of fastq files: {value}")
 
 
 class UnexpectedPEType(Error):
     """Unexpected value for PE"""
 
-    def __init__(value: str) -> None:
+    def __init__(self, value: str) -> None:
         super().__init__(f"Unexpected value for PE: {value}")

@@ -1,5 +1,5 @@
 from itertools import zip_longest
-from typing import Tuple
+from typing import Any, Tuple
 
 import pandas as pd
 from numpy import iterable
@@ -20,7 +20,7 @@ STRAT_PE_TARGZ_FQPLAIN = 'paired plain fastq files in tar.gz'
 STRAT_SE_TARGZ_FQPLAIN = 'single plain fastq file in tar.gz'
 
 
-def grouper(n: int, iterable: iterable, fillvalue: any = None) -> iterable:
+def grouper(n: int, iterable: iterable, fillvalue: Any = None) -> iterable:
     "Collect data into fixed-length chunks or blocks"
     # grouper(3, 'ABCDEFG', 'x') --> ABC DEF Gxx"
     args = [iter(iterable)] * n
