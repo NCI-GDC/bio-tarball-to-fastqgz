@@ -6,7 +6,7 @@
 #
 attrs==21.2.0
     # via pytest
-backports.entry-points-selectable==1.1.0
+backports-entry-points-selectable==1.1.0
     # via virtualenv
 certifi==2021.5.30
     # via requests
@@ -70,7 +70,7 @@ pyyaml==5.4.1
     # via
     #   detect-secrets
     #   pre-commit
-requests==2.26.0
+requests==2.31.0
     # via detect-secrets
 six==1.15.0
     # via
