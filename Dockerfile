@@ -20,6 +20,4 @@ RUN pip install -r requirements.txt \
 	&& pip install *.tar.gz \
 	&& rm -rf *.tar.gz requirements.txt
 
-ENTRYPOINT ["tarball_to_fastqgz"]
-
-CMD ["--help"]
+CMD ["tarball_to_fastqgz --help"]
