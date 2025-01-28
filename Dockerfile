@@ -27,6 +27,4 @@ RUN pip install --no-deps -r requirements.txt \
 
 USER app
 
-ENTRYPOINT ["bio-tarball-to-fastqgz"]
-
-CMD ["--help"]
+CMD ["tarball_to_fastqgz --help"]
