@@ -1,6 +1,6 @@
 import tarfile
 from itertools import repeat
-from typing import Any, Dict, Union
+from typing import Dict, Union
 
 import mgzip
 from numpy import iterable
