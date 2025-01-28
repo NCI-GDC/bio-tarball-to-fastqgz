@@ -20,7 +20,7 @@ from tarball_to_fastqgz.tarmeta import get_meta
 try:
     from tarball_to_fastqgz import __version__
 except Exception:
-    __version__ = '0.0.0'
+    __version__ = "0.0.0"
 
 log = logging.getLogger(__name__)
 
@@ -39,7 +39,7 @@ def setup_parser() -> None:
 
     logging_group = parser.add_argument_group("Logging")
     logging_group.add_argument(
-        '--log-level',
+        "--log-level",
         choices=[
             logging.INFO,
             logging.DEBUG,
@@ -51,41 +51,41 @@ def setup_parser() -> None:
         default=logging.INFO,
     )
     logging_group.add_argument(
-        '--log-format',
+        "--log-format",
         type=str,
-        metavar='STR',
+        metavar="STR",
         default="%(asctime)s %(name)s:%(lineno)s %(levelname)s | %(message)s",
     )
 
-    parser.add_argument('--version', action='version', version=__version__)
+    parser.add_argument("--version", action="version", version=__version__)
     parser.add_argument(
-        '--meta',
-        '-m',
-        dest='meta',
+        "--meta",
+        "-m",
+        dest="meta",
         type=str,
         required=False,
-        help='metadata describing tarball contents',
+        help="metadata describing tarball contents",
         default=resource_filename(
             "tarball_to_fastqgz", "metadata/tcga.rna.11128.tarball.meta.tsv"
         ),
     )
     parser.add_argument(
-        '--tarball', '-t', dest='tarfile', type=str, required=True, help='tar file'
+        "--tarball", "-t", dest="tarfile", type=str, required=True, help="tar file"
     )
     parser.add_argument(
-        '--sample',
-        dest='sample',
+        "--sample",
+        dest="sample",
         type=str,
         required=True,
-        help='sample identifier (uuid)',
+        help="sample identifier (uuid)",
     )
     parser.add_argument(
-        '--dryrun',
-        dest='dryrun',
+        "--dryrun",
+        dest="dryrun",
         required=False,
         default=False,
-        action='store_true',
-        help='Do not write any files just print json to STDOUT',
+        action="store_true",
+        help="Do not write any files just print json to STDOUT",
     )
 
     return parser
@@ -108,10 +108,10 @@ def process_args(argv: Optional[List] = None) -> collections.namedtuple:
     args_dict = vars(args)
 
     # Process extras list
-    args_dict['extras'] = unknown_args
+    args_dict["extras"] = unknown_args
 
     # Recast to immutable namedtuple
-    run_args = collections.namedtuple('RunArgs', list(args_dict.keys()))
+    run_args = collections.namedtuple("RunArgs", list(args_dict.keys()))
     return run_args(**args_dict)
 
 
@@ -125,31 +125,31 @@ def run(run_args: collections.namedtuple) -> int:
     log.info("Running process...")
 
     log.info("Got arguments:")
-    log.info('meta {}'.format(run_args.meta))
-    log.info('tarfile {}'.format(run_args.tarfile))
-    log.info('sample {}'.format(run_args.sample))
+    log.info("meta {}".format(run_args.meta))
+    log.info("tarfile {}".format(run_args.tarfile))
+    log.info("sample {}".format(run_args.sample))
 
     # get metadata relevant to tarfile
-    log.info('Parsing metadata table.')
+    log.info("Parsing metadata table.")
     meta, fq_list = get_meta(
         meta_file=run_args.meta, tar_file=os.path.basename(run_args.tarfile)
     )
 
     # find targets in tar file, save in look-up table
-    log.info('Identifying file paths in tarball')
+    log.info("Identifying file paths in tarball")
     tar_members = find_targets_from_tar(
         tar_file=run_args.tarfile, target_file_list=fq_list
     )
 
     # stage fastq and read files
-    log.info('Staging data')
+    log.info("Staging data")
     stage(
         meta,
         tar_members,
         run_args.tarfile,
         run_args.sample,
-        json_filename='rg_fastq_list.json',
-        prefix='./',
+        json_filename="rg_fastq_list.json",
+        prefix="./",
         dryrun=run_args.dryrun,
     )
 

@@ -40,7 +40,7 @@ def build_cwl_file(file: str) -> dict:
     build dictionary representing cwl File object
     """
 
-    return {'class': 'File', 'location': os.path.basename(file)}
+    return {"class": "File", "location": os.path.basename(file)}
 
 
 def build_rg_fastq_file_record(

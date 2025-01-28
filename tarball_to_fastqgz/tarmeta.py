@@ -7,17 +7,17 @@ from numpy import iterable
 # from tarball_to_fastqgz.error import UndefinedTarType, UndefinedFastqType, FqNumberOutOfBounds, UnexpectedPEType
 
 # TAR TYPES
-TAR_FASTQ = 'fastq.tar'
-TAR_GZ = 'tar.gz'
+TAR_FASTQ = "fastq.tar"
+TAR_GZ = "tar.gz"
 
 # FASTQ TYPES
-FASTQ_PLAIN = 'fastq'
-FASTQ_GZ = 'fastq.gz'
+FASTQ_PLAIN = "fastq"
+FASTQ_GZ = "fastq.gz"
 
 # RESOLUTION STRATEGIES
-STRAT_PE_TAR_FQGZ = 'list of paired fastq.gz files'
-STRAT_PE_TARGZ_FQPLAIN = 'paired plain fastq files in tar.gz'
-STRAT_SE_TARGZ_FQPLAIN = 'single plain fastq file in tar.gz'
+STRAT_PE_TAR_FQGZ = "list of paired fastq.gz files"
+STRAT_PE_TARGZ_FQPLAIN = "paired plain fastq files in tar.gz"
+STRAT_SE_TARGZ_FQPLAIN = "single plain fastq file in tar.gz"
 
 
 def grouper(n: int, iterable: iterable, fillvalue: Any = None) -> iterable:
@@ -67,25 +67,25 @@ def get_meta(meta_file: str = None, tar_file: str = None) -> Tuple[dict, str]:
 
     df = pd.read_table(meta_file)
     # select records that correspond to the specific tar file
-    sel = df['tar_name'] == tar_file
+    sel = df["tar_name"] == tar_file
     tdf = df[sel].copy()
     # prepare to build metadata dictionary
     meta = {}
     # save keys consistent in tar file
-    for key in ['tar_name', 'sar_id', 'project', 'tar_type', 'num_fq', 'PE', 'fq_type']:
+    for key in ["tar_name", "sar_id", "project", "tar_type", "num_fq", "PE", "fq_type"]:
         meta[key] = tdf.iloc[0][key]
-        if key == 'PE':
+        if key == "PE":
             meta[key] = bool(meta[key])
         # iterate over read groups in tar file saving rg name and paired files
         rg_name_list = []
         rg_dict_list = []
-        for idx, grp in tdf.groupby('read_group_name'):
+        for idx, grp in tdf.groupby("read_group_name"):
             rg = {}
-            rg['files'] = list(grouper(2, grp['fq_name'].sort_values()))
+            rg["files"] = list(grouper(2, grp["fq_name"].sort_values()))
             rg_name_list.append(idx)
             rg_dict_list.append(rg)
-        meta['read_groups'] = dict(zip(rg_name_list, rg_dict_list))
-    return meta, tdf['fq_name'].tolist()
+        meta["read_groups"] = dict(zip(rg_name_list, rg_dict_list))
+    return meta, tdf["fq_name"].tolist()
 
 
 # def check_input_types(linedict):
