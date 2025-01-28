@@ -1,6 +1,6 @@
 [build-system]
 requires = ["lint.flit_scm"]
-build-backend = "flit_scm:buildapi"
+build-backend = "lint.flit_scm:buildapi"
 
 [project]
 name = "bio-tarball-to-fastqgz"
