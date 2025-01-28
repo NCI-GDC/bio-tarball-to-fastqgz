@@ -1,6 +1,6 @@
 try:
     from tarball_to_fastqgz._version import version
 except ImportError:
-    version = "unknown"
+    version = "0"
 
 __version__ = version
