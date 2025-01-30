@@ -1,5 +1,6 @@
 from itertools import zip_longest
-from typing import Any, Tuple
+from os import PathLike
+from typing import Any, Dict, Iterable, List, Optional, Tuple
 
 import pandas as pd
 from numpy import iterable
@@ -20,14 +21,16 @@ STRAT_PE_TARGZ_FQPLAIN = "paired plain fastq files in tar.gz"
 STRAT_SE_TARGZ_FQPLAIN = "single plain fastq file in tar.gz"
 
 
-def grouper(n: int, iterable: iterable, fillvalue: Any = None) -> iterable:
+def grouper(n: int, iterable: Iterable, fillvalue: Any = None) -> Iterable:
     "Collect data into fixed-length chunks or blocks"
     # grouper(3, 'ABCDEFG', 'x') --> ABC DEF Gxx"
     args = [iter(iterable)] * n
     return zip_longest(fillvalue=fillvalue, *args)
 
 
-def get_meta(meta_file: str = None, tar_file: str = None) -> Tuple[dict, str]:
+def get_meta(
+    meta_file: PathLike[str], tar_file: Optional[str] = None
+) -> Tuple[Dict[str, Any], List[Any]]:
     """
     lookup tar_file in meta_file and decide how to handle the data
     metadata is expected to have these columns:

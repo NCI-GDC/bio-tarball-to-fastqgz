@@ -1,6 +1,7 @@
 import tarfile
+from io import BufferedReader
 from itertools import repeat
-from typing import Dict, Union
+from typing import IO, Dict, Optional, Union
 
 import mgzip
 from numpy import iterable
@@ -36,13 +37,14 @@ def from_tar_to_dest(
 
     with tarfile.open(tar_file, "r") as tar:
         content = tar.extractfile(tar_member)
-        if compress_dest:
-            write_to_gzip_file(content, destination)
-        else:
-            write_to_plain_file(content, destination)
+        if content:
+            if compress_dest:
+                write_to_gzip_file(content, destination)
+            else:
+                write_to_plain_file(content, destination)
 
 
-def write_to_plain_file(content: iterable, destination: str) -> None:
+def write_to_plain_file(content: IO[bytes], destination: str) -> None:
     """
     Write content to plain file
     """
@@ -51,7 +53,7 @@ def write_to_plain_file(content: iterable, destination: str) -> None:
             destfile.write(blob)
 
 
-def write_to_gzip_file(content: iterable, destination: str) -> None:
+def write_to_gzip_file(content: IO[bytes], destination: str) -> None:
     """
     Write content to gzipped file
     """

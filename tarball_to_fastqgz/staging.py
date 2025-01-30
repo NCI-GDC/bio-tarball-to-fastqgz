@@ -1,4 +1,5 @@
 from json import dumps
+from typing import Callable
 
 from tarball_to_fastqgz.error import NoStrategyError
 from tarball_to_fastqgz.fileops import from_tar_to_dest
@@ -35,7 +36,7 @@ def stage(
     write_json_file(rg_fq_record_list, prefix + json_filename, dryrun)
 
 
-def write_json_file(object: list, json_filename: str, dryrun: bool = False):
+def write_json_file(object: list, json_filename: str, dryrun: bool = False) -> None:
     """
     Writes readgroup_fastq_file_list json file
     """
@@ -46,7 +47,7 @@ def write_json_file(object: list, json_filename: str, dryrun: bool = False):
             json_out.write(dumps(object))
 
 
-def resolve_strategy(meta: dict) -> callable:
+def resolve_strategy(meta: dict) -> Callable:
     """
     Decide which strategy to use for extracting files and placing them where they should be
     """
@@ -105,7 +106,7 @@ def strat_pe_targz_fqplain(
     basename: str,
     prefix: str = "./",
     dryrun: bool = False,
-):
+) -> str:
     """
     tar.gz file contiaining plain paired-end fastq files
 
@@ -130,7 +131,7 @@ def strat_se_targz_fqplain(
     basename: str,
     prefix: str = "./",
     dryrun: bool = False,
-):
+) -> str:
     """
     tar.gz file containing plain single-end fastq file
 

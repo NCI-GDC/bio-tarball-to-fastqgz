@@ -9,7 +9,8 @@ import datetime
 import logging
 import os
 import sys
-from typing import List, Optional
+from os import PathLike
+from typing import List, NamedTuple, Optional
 
 from pkg_resources import resource_filename
 
@@ -25,16 +26,27 @@ except Exception:
 log = logging.getLogger(__name__)
 
 
-def setup_logger(args: collections.namedtuple) -> None:
-    """Apply logging config from CLI args."""
+class RunArgs(NamedTuple):
+    """Static NamedTuple for command-line arguments."""
 
+    log_level: int
+    log_format: str
+    meta: PathLike[str]
+    tarfile: str
+    sample: str
+    dryrun: bool
+    extras: List[str]
+
+
+def setup_logger(args: RunArgs) -> None:
+    """Apply logging config from CLI args."""
     logging.basicConfig(
         level=args.log_level,
         format=args.log_format,
     )
 
 
-def setup_parser() -> None:
+def setup_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser()
 
     logging_group = parser.add_argument_group("Logging")
@@ -64,20 +76,20 @@ def setup_parser() -> None:
         dest="meta",
         type=str,
         required=False,
-        help="metadata describing tarball contents",
+        help="Metadata describing tarball contents",
         default=resource_filename(
             "tarball_to_fastqgz", "metadata/tcga.rna.11128.tarball.meta.tsv"
         ),
     )
     parser.add_argument(
-        "--tarball", "-t", dest="tarfile", type=str, required=True, help="tar file"
+        "--tarball", "-t", dest="tarfile", type=str, required=True, help="Tar file"
     )
     parser.add_argument(
         "--sample",
         dest="sample",
         type=str,
         required=True,
-        help="sample identifier (uuid)",
+        help="Sample identifier (UUID)",
     )
     parser.add_argument(
         "--dryrun",
@@ -85,63 +97,62 @@ def setup_parser() -> None:
         required=False,
         default=False,
         action="store_true",
-        help="Do not write any files just print json to STDOUT",
+        help="Do not write any files, just print JSON to STDOUT",
     )
 
     return parser
 
 
-def process_args(argv: Optional[List] = None) -> collections.namedtuple:
-    """Process args to NamedTuple."""
-
+def process_args(argv: Optional[List[str]] = None) -> RunArgs:
+    """Process args into a statically declared RunArgs NamedTuple."""
     parser = setup_parser()
-    argv = argv or sys.argv
-
-    if argv:
-        args, unknown_args = parser.parse_known_args(argv)
-    else:
+    if argv is None:
+        # If no argv is passed, parse from command line
         args, unknown_args = parser.parse_known_args()
+    else:
+        args, unknown_args = parser.parse_known_args(argv)
 
-    # if args.data_dir:
-    #     os.makedirs(args.data_dir)
-
+    # Convert argparse namespace to a dict
     args_dict = vars(args)
+    # Add any extra unknown arguments
+    extras_list = unknown_args
 
-    # Process extras list
-    args_dict["extras"] = unknown_args
+    return RunArgs(
+        log_level=args_dict["log_level"],
+        log_format=args_dict["log_format"],
+        meta=args_dict["meta"],
+        tarfile=args_dict["tarfile"],
+        sample=args_dict["sample"],
+        dryrun=args_dict["dryrun"],
+        extras=extras_list,
+    )
 
-    # Recast to immutable namedtuple
-    run_args = collections.namedtuple("RunArgs", list(args_dict.keys()))
-    return run_args(**args_dict)
 
-
-def run(run_args: collections.namedtuple) -> int:
-    """Method for running script logic."""
-
+def run(run_args: RunArgs) -> int:
+    """Main script logic."""
     ret_val = 0
-
     start_time = datetime.datetime.now()
 
     log.info("Running process...")
 
     log.info("Got arguments:")
-    log.info("meta {}".format(run_args.meta))
-    log.info("tarfile {}".format(run_args.tarfile))
-    log.info("sample {}".format(run_args.sample))
+    log.info("meta: %s", run_args.meta)
+    log.info("tarfile: %s", run_args.tarfile)
+    log.info("sample: %s", run_args.sample)
 
-    # get metadata relevant to tarfile
+    # Get metadata relevant to tarfile
     log.info("Parsing metadata table.")
     meta, fq_list = get_meta(
         meta_file=run_args.meta, tar_file=os.path.basename(run_args.tarfile)
     )
 
-    # find targets in tar file, save in look-up table
+    # Find targets in tar file, save in lookup table
     log.info("Identifying file paths in tarball")
     tar_members = find_targets_from_tar(
         tar_file=run_args.tarfile, target_file_list=fq_list
     )
 
-    # stage fastq and read files
+    # Stage fastq and read files
     log.info("Staging data")
     stage(
         meta,
@@ -160,12 +171,10 @@ def run(run_args: collections.namedtuple) -> int:
     return ret_val
 
 
-def main(argv=None) -> int:
-    """Main Entrypoint."""
+def main(argv: Optional[List[str]] = None) -> int:
+    """Main entry point."""
     exit_code = 0
-
     args = process_args(argv)
-
     setup_logger(args)
 
     log.info("Process called with %s", args)
@@ -180,7 +189,6 @@ def main(argv=None) -> int:
 
 if __name__ == "__main__":
     """CLI Entrypoint"""
-
     status_code = 0
     try:
         status_code = main()
@@ -188,6 +196,3 @@ if __name__ == "__main__":
         log.exception(e)
         sys.exit(1)
     sys.exit(status_code)
-
-
-# __END__
