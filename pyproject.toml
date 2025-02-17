@@ -41,7 +41,7 @@ dev = [
     "ruff",
     "mypy",
     "pre-commit>=2.9.0",
-    "tox",
+    "tox"
 ]
 
 test = [
@@ -51,6 +51,8 @@ test = [
 
 type = [
     "types-click",
+    "types-setuptools",
+    "pandas-stubs"
 ]
 
 [project.urls]
