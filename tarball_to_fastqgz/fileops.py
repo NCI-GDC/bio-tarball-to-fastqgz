@@ -1,10 +1,8 @@
 import tarfile
-from io import BufferedReader
 from itertools import repeat
-from typing import IO, Dict, Optional, Union
+from typing import IO, Dict, Union
 
 import mgzip
-from numpy import iterable
 
 
 def find_targets_from_tar(tar_file: str, target_file_list: list = []) -> dict:

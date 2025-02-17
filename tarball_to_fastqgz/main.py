@@ -4,7 +4,6 @@ Python Project Template
 """
 
 import argparse
-import collections
 import datetime
 import logging
 import os

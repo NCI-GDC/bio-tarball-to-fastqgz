@@ -3,7 +3,6 @@ from os import PathLike
 from typing import Any, Dict, Iterable, List, Optional, Tuple
 
 import pandas as pd
-from numpy import iterable
 
 # from tarball_to_fastqgz.error import UndefinedTarType, UndefinedFastqType, FqNumberOutOfBounds, UnexpectedPEType
 
