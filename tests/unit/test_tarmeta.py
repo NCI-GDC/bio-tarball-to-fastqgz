@@ -1,5 +1,5 @@
-from unittest import TestCase
 from importlib.resources import files
+from unittest import TestCase
 
 from tarball_to_fastqgz.tarmeta import get_meta, grouper
 
@@ -40,4 +40,3 @@ class TestTarMeta(TestCase):
         rgmeta, files_out = get_meta(meta_file, tarball)
         assert rgmeta["PE"] is False
         assert rgmeta["num_fq"] == 1
-
