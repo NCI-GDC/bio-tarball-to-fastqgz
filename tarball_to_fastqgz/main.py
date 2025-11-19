@@ -11,7 +11,7 @@ import sys
 from os import PathLike
 from typing import List, NamedTuple, Optional
 
-from pkg_resources import resource_filename
+from pkg_resources import resource_filename # type: ignore
 
 from tarball_to_fastqgz.fileops import find_targets_from_tar
 from tarball_to_fastqgz.staging import stage

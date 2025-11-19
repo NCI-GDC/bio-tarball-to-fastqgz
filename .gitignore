@@ -118,4 +118,5 @@ aws-lc
 
 # wheel fix
 gl-sast-report.json
+
 gl-secret-detection-report.json

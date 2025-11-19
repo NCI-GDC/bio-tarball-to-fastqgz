@@ -75,9 +75,9 @@ def get_meta(
     meta = {}
     # save keys consistent in tar file
     for key in ["tar_name", "sar_id", "project", "tar_type", "num_fq", "PE", "fq_type"]:
-        meta[key] = tdf.iloc[0][key]
+        meta[key] = tdf.iloc[0][key] # type: ignore
         if key == "PE":
-            meta[key] = bool(meta[key])
+            meta[key] = bool(meta[key]) # type: ignore
         # iterate over read groups in tar file saving rg name and paired files
         rg_name_list = []
         rg_dict_list = []
@@ -86,7 +86,7 @@ def get_meta(
             rg["files"] = list(grouper(2, grp["fq_name"].sort_values()))
             rg_name_list.append(idx)
             rg_dict_list.append(rg)
-        meta["read_groups"] = dict(zip(rg_name_list, rg_dict_list))
+        meta["read_groups"] = dict(zip(rg_name_list, rg_dict_list)) # type: ignore
     return meta, tdf["fq_name"].tolist()
 
 
