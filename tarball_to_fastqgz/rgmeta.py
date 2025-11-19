@@ -1,4 +1,5 @@
 import os
+from typing import Optional
 
 
 def build_cwl_rgmeta(sample: str, rgname: str) -> dict:
@@ -40,11 +41,11 @@ def build_cwl_file(file: str) -> dict:
     build dictionary representing cwl File object
     """
 
-    return {'class': 'File', 'location': os.path.basename(file)}
+    return {"class": "File", "location": os.path.basename(file)}
 
 
 def build_rg_fastq_file_record(
-    sample: str, rgname: str, fq1: str, fq2: str = None
+    sample: str, rgname: str, fq1: str, fq2: Optional[str] = None
 ) -> dict:
     """
     build dictionary representing readgroup_fastq_file object

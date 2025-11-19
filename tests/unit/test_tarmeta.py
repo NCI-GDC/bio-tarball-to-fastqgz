@@ -7,18 +7,18 @@ from tarball_to_fastqgz.tarmeta import get_meta, grouper
 
 class TestTarMeta(TestCase):
     def test_grouper_even(self):
-        source = ['a', 'b', 'c', 'd']
+        source = ["a", "b", "c", "d"]
         res = list(grouper(2, source, fillvalue=None))
 
-        expected = [('a', 'b'), ('c', 'd')]
+        expected = [("a", "b"), ("c", "d")]
 
         assert res == expected
 
     def test_grouper_odd(self):
-        source = ['a', 'b', 'c']
+        source = ["a", "b", "c"]
         res = list(grouper(2, source, fillvalue=None))
 
-        expected = [('a', 'b'), ('c', None)]
+        expected = [("a", "b"), ("c", None)]
 
         assert res == expected
 
@@ -26,7 +26,7 @@ class TestTarMeta(TestCase):
         meta_file = resource_filename(
             "tarball_to_fastqgz", "metadata/tcga.rna.11128.tarball.meta.tsv"
         )
-        tarball = 'UNCID_2199907.0f61b005-3643-4a6b-a075-bffb7320a2f3.111206_UNC15-SN850_0154_BD080PACXX_8_ATCACG.tar.gz'
+        tarball = "UNCID_2199907.0f61b005-3643-4a6b-a075-bffb7320a2f3.111206_UNC15-SN850_0154_BD080PACXX_8_ATCACG.tar.gz"
         rgmeta, files = get_meta(meta_file, tarball)
 
         expected = {

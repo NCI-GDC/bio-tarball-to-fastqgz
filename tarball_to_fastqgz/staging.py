@@ -1,4 +1,5 @@
 from json import dumps
+from typing import Callable
 
 from tarball_to_fastqgz.error import NoStrategyError
 from tarball_to_fastqgz.fileops import from_tar_to_dest
@@ -11,8 +12,8 @@ def stage(
     tar_members: dict,
     tarfile: str,
     sample_id: str,
-    json_filename: str = 'rg_fastq_list.json',
-    prefix: str = './',
+    json_filename: str = "rg_fastq_list.json",
+    prefix: str = "./",
     dryrun: bool = False,
 ) -> None:
     """
@@ -22,8 +23,8 @@ def stage(
     strategy_fn = resolve_strategy(meta)
     rg_fq_record_list = []
 
-    for rg_name, rg_dict in meta['read_groups'].items():
-        for fq1, fq2 in rg_dict['files']:
+    for rg_name, rg_dict in meta["read_groups"].items():
+        for fq1, fq2 in rg_dict["files"]:
             fq1_loc = strategy_fn(tarfile, tar_members[fq1], fq1, prefix, dryrun)
             fq2_loc = (
                 strategy_fn(tarfile, tar_members[fq2], fq2, prefix, dryrun)
@@ -35,38 +36,38 @@ def stage(
     write_json_file(rg_fq_record_list, prefix + json_filename, dryrun)
 
 
-def write_json_file(object: list, json_filename: str, dryrun: bool = False):
+def write_json_file(object: list, json_filename: str, dryrun: bool = False) -> None:
     """
     Writes readgroup_fastq_file_list json file
     """
     if dryrun:
         print(dumps(object, indent=4, sort_keys=True))
     else:
-        with open(json_filename, 'w') as json_out:
+        with open(json_filename, "w") as json_out:
             json_out.write(dumps(object))
 
 
-def resolve_strategy(meta: dict) -> callable:
+def resolve_strategy(meta: dict) -> Callable:
     """
     Decide which strategy to use for extracting files and placing them where they should be
     """
 
     if (
-        meta['tar_type'] == TAR_FASTQ
-        and meta['fq_type'] == FASTQ_GZ
-        and meta['PE'] is True
+        meta["tar_type"] == TAR_FASTQ
+        and meta["fq_type"] == FASTQ_GZ
+        and meta["PE"] is True
     ):
         return strat_pe_tar_fqgz
     if (
-        meta['tar_type'] == TAR_GZ
-        and meta['fq_type'] == FASTQ_PLAIN
-        and meta['PE'] is True
+        meta["tar_type"] == TAR_GZ
+        and meta["fq_type"] == FASTQ_PLAIN
+        and meta["PE"] is True
     ):
         return strat_pe_targz_fqplain
     if (
-        meta['tar_type'] == TAR_GZ
-        and meta['fq_type'] == FASTQ_PLAIN
-        and meta['PE'] is False
+        meta["tar_type"] == TAR_GZ
+        and meta["fq_type"] == FASTQ_PLAIN
+        and meta["PE"] is False
     ):
         return strat_se_targz_fqplain
 
@@ -77,7 +78,7 @@ def strat_pe_tar_fqgz(
     tar_filename: str,
     tar_member: str,
     basename: str,
-    prefix: str = './',
+    prefix: str = "./",
     dryrun: bool = False,
 ) -> str:
     """
@@ -103,16 +104,16 @@ def strat_pe_targz_fqplain(
     tar_filename: str,
     tar_member: str,
     basename: str,
-    prefix: str = './',
+    prefix: str = "./",
     dryrun: bool = False,
-):
+) -> str:
     """
     tar.gz file contiaining plain paired-end fastq files
 
     Extract fastq files, write compressed file to output directory
     returns destination file
     """
-    dest_name = prefix + basename + '.gz'
+    dest_name = prefix + basename + ".gz"
     # extract tar_member from tar file, gzip and save to file at dest_name
     if not dryrun:
         from_tar_to_dest(
@@ -128,9 +129,9 @@ def strat_se_targz_fqplain(
     tar_filename: str,
     tar_member: str,
     basename: str,
-    prefix: str = './',
+    prefix: str = "./",
     dryrun: bool = False,
-):
+) -> str:
     """
     tar.gz file containing plain single-end fastq file
 
@@ -138,7 +139,7 @@ def strat_se_targz_fqplain(
     returns destination file
     """
 
-    dest_name = prefix + basename + '.gz'
+    dest_name = prefix + basename + ".gz"
     # extract tar_member from tar file, gzip and save to file at dest_name
     if not dryrun:
         from_tar_to_dest(

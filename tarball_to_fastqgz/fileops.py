@@ -1,9 +1,8 @@
 import tarfile
 from itertools import repeat
-from typing import Any, Dict, Union
+from typing import IO, Dict, Union
 
 import mgzip
-from numpy import iterable
 
 
 def find_targets_from_tar(tar_file: str, target_file_list: list = []) -> dict:
@@ -21,7 +20,7 @@ def find_targets_from_tar(tar_file: str, target_file_list: list = []) -> dict:
     with tarfile.open(tar_file, "r") as tar:
         for tarinfo in tar:
             # save tar path for desired files
-            basename = tarinfo.name.split('/')[-1]
+            basename = tarinfo.name.split("/")[-1]
             if basename in targets.keys():
                 targets[basename] = tarinfo.name
     return targets
@@ -36,26 +35,27 @@ def from_tar_to_dest(
 
     with tarfile.open(tar_file, "r") as tar:
         content = tar.extractfile(tar_member)
-        if compress_dest:
-            write_to_gzip_file(content, destination)
-        else:
-            write_to_plain_file(content, destination)
+        if content:
+            if compress_dest:
+                write_to_gzip_file(content, destination)
+            else:
+                write_to_plain_file(content, destination)
 
 
-def write_to_plain_file(content: iterable, destination: str) -> None:
+def write_to_plain_file(content: IO[bytes], destination: str) -> None:
     """
     Write content to plain file
     """
-    with open(destination, 'wb') as destfile:
+    with open(destination, "wb") as destfile:
         for blob in content:
             destfile.write(blob)
 
 
-def write_to_gzip_file(content: iterable, destination: str) -> None:
+def write_to_gzip_file(content: IO[bytes], destination: str) -> None:
     """
     Write content to gzipped file
     """
 
-    with mgzip.open(destination, 'wb', thread=12) as destfile:
+    with mgzip.open(destination, "wb", thread=12) as destfile:
         for blob in content:
             destfile.write(blob)
